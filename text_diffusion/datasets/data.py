@@ -10,6 +10,7 @@ def add_data_args(parser):
     # Data params
     parser.add_argument('--dataset', type=str, default='text8_256', choices=dataset_choices)
     parser.add_argument('--validation', type=eval, default=True)
+    parser.add_argument('--num_classes', type=int, default=0)
 
     # Train params
     parser.add_argument('--batch_size', type=int, default=16)
@@ -30,19 +31,19 @@ def get_data(args):
         valid = Text8Dataset(seq_len=256, split='valid')
         test = Text8Dataset(seq_len=256, split='test')
         data_shape = (256,)
-        num_classes = 27
+        num_classes = args.num_classes or 27 
     elif args.dataset == 'ptb_catnf':
         train = PennTreebankDataset(max_seq_len=288, split='train', preproc='catnf', download=True)
         valid = PennTreebankDataset(max_seq_len=288, split='valid', preproc='catnf')
         test = PennTreebankDataset(max_seq_len=288, split='test', preproc='catnf')
         data_shape = (288,)
-        num_classes = 51
+        num_classes = args.num_classes or 51
     elif args.dataset == 'enwik8_blocksparse':
         train = EnWik8Dataset(seq_len=320, split='train', download=True)
         valid = EnWik8Dataset(seq_len=320, split='valid')
         test = EnWik8Dataset(seq_len=320, split='test')
         data_shape = (320,)
-        num_classes = 256
+        num_classes = args.num_classes or 256
 
     # Data Loader
     if args.validation:
